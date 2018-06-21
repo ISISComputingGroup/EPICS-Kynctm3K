@@ -7,40 +7,176 @@ getIDN {
     ExtraInput = Ignore;
 }
 
+##########################################
+########## Measurement Controls ##########
+## Commands for taking measurements and ##
+### switching between measurement modes ##
+##########################################
+
+#### THESE COMMANDS CAN ONLY BE ACCEPTED WHEN ####
+####   THE MEASUREMENT SCREEN IS DISPLAYED    ####
+
+# Switches between measurement screens on the device.
+set_MEAS_screen {
+    out "DC,%i";
+    in "DC";
+}
+
+# Gets all set OUT values
+get_MEAS_all {
+    out "MA";
+    in "MA,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i";
+}
+
+# Externally trigger measurement
+trigger_INPUT {
+    out "S%i";
+    in "S%i";
+}
+
+# Set auto zero for one OUT measurement
+set_AUTO_ZERO_ON {
+    out "VM,%i";
+    in "VM,%i";
+}
+
+# Set auto zero for all measured OUT measurements
+set_AUTO_ZERO_ON_ALL {
+    out "VA";
+    in "VA";
+}
+
+# Turn off auto zero for one OUT measurement
+set_AUTO_ZERO_OFF {
+    out "WM,%i";
+    in "WM,%i";
+}
+
+# Turn off auto zero for all measured OUT measurements
+set_AUTO_ZERO_OFF_ALL {
+    out "WA";
+    in "WA";
+}
+
+# Turns on timing input for specified OUT numbers (16-digit in)
+set_TIMING_INPUT {
+    out "TM,%i,%i";
+    in "TM,%i,%i";
+}
+
+# Turns on timing input OUT specified in TIMING1
+set_TIMING_1 {
+    out "T1,%i";
+    in "T1,%i";
+}
+
+
+# Resets measured value and evaluation
+RESET {
+    out "VR";
+    in "VR";
+}
+
+# Applies a keylock on the terminal to prevent accidental changes
+set_KEYLOCK {
+    out "KL,%i";
+    in "KL";
+}
+
+# Device has 16 available program slots
+get_PROGRAM_NO {
+    out "PR";
+    in "PR,%i";
+}
+
+# Choose which program to use
+set_PROGRAM_NO {
+    out "PW,%i";
+    in "PW";
+}
+
+# Switch between programs in memory and on the memory card
+set_MEMCARD_PROGRAM_NO {
+    out "PC,%i,%i";
+    in "PC";
+}
+
+# Start storage operations
+start_STORAGE {
+    out "AS";
+    in "AS";
+}
+
+# Stop storage operations
+stop_STORAGE {
+    out "AP";
+    in "AP";
+}
+
+# Clears stored data
+init_STORAGE {
+    out "AQ";
+    in "AQ";
+}
+
+# Confirms state of storage (running/stopped)
+get_STORAGE_STATE {
+    out "AN";
+    in "AN,%i,%i";
+}
+
+# Acquire the currently stored data
+get_STORAGE_DATA {
+    out "AD,%i";
+    in "AD,%i,
+
+# Copies stored data from memory to memory card
+save_STORAGE_DATA {
+    out "SS";
+    in "SS";
+}
+
 ###################
 ## HEAD SETTINGS ##
 ###################
 
+# 0:continuous; 1:external
 set_TRIGGER_MODE {
     out "SW,HA,%i";
     in "SW,HA";
 }
 
+# 0:continuous; 1:external
 get_TRIGGER_MODE {
     out "SR,HA";
     in "SR,HA,%i";
 }
 
+# 0:Interference prevention off; 1:Interference prevention on
 set_INTERFERENCE_PREVENTION {
     out "SW,HB,%i";
     in "SW,HB";
 }
 
+# 0:Unset; 1:Set
 get_INTERFERENCE_PREVENTION {
     out "SR,HB";
     in "SR,HB,%i";
 }
 
+# 0:Unset; 1:Set
 set_TRIGGER_RATE {
     out "SW,HC,%i";
     in "SW,HC";
 }
 
+# 0:Unset; 1:Set
 get_TRIGGER_RATE {
     out "SR,HC";
     in "SR,HC";
 }
 
+# (0|1|2):(Both heads|only Head A|only Head B), (range head A), (range head B)
 set_MEAS_RANGE {
     out "SW,HD,%i,%i,%i";
     in "SW,HD";
@@ -51,6 +187,7 @@ get_MEAS_RANGE {
     in "SR,HD,%i,%i,%i";
 }
 
+# (0|1|2):(Both heads|only Head A|only Head B), Threshold 10-99
 set_THRESHOLD_VALUE {
     out "SW,HE,%i,%i";
     in "SW,HE";
@@ -61,6 +198,12 @@ get_THRESHOLD_VALUE {
     in "SR,HE,%i,%i";
 }
 
+###############################################
+################ OUT Settings #################
+## Applied piecewise to a single OUT channel ##
+###############################################
+
+# Sets a moving average for each OUT channel
 set_OUT_AVERAGE {
     out "SW,OA,%i,%i";
     in "SW,OA";
@@ -71,6 +214,7 @@ get_OUT_AVERAGE {
     in "SR,OA,%i,%i";
 }
 
+# Sets the ALARM specification for an OUT channel
 set_OUT_ALARM {
     out "SW,OB,%i,%i";
     in "SW,OB";
@@ -131,6 +275,12 @@ get_OUT_TOLERANCE {
     in "SR,LM,%i,%i,%i";
 }
 
+#########################################
+############ Common settings ############
+## Usually applied to all OUT channels ##
+#########################################
+
+# 1:TIMING1 used; 2:TIMING2 used
 set_COMMON_TIMING {
     out "SW,CA,%i";
     in "SW,CA";
@@ -141,6 +291,7 @@ get_COMMON_TIMING {
     in "SR,CA,%i";
 }
 
+# 1:ZERO1 used; 2:ZERO2 used
 set_COMMON_ZERO {
     out "SW,CB,%i";
     in "SW,CB";
@@ -151,16 +302,18 @@ get_COMMON_ZERO {
     in "SR,CB,%i";
 }
 
-set_COMMON_BINARY_OUT {
+# (0|1):Unset/set Evaluation output, 16 digits sets/unsets binary output for each OUT channel
+set_COMMON_OUTPUTS {
     out "SW,CC,%i,%i";
     in "SW,CC";
 }
 
-get_COMMON_BINARY_OUT {
+get_COMMON_OUTPUTS {
     out "SR,CC";
     in "SR,CC,%i,%i";
 }
 
+# 0:CH1 used; 1:CH2 used, OUT number (1-16)
 set_COMMON_ANALOG_OUT {
     out "SW,CD,%i,%i";
     in "SW,CD,%i";
@@ -181,6 +334,7 @@ get_COMMON_ANALOG_SCALE {
     in "SR,CE,%i,%i,%i,%i,%i";
 }
 
+# 0:store nothing; 1:store data; 2:store images
 set_COMMON_STORAGE_TYPE {
     out "SW,CF,%i";
     in "SW,CF";
@@ -221,6 +375,11 @@ get_COMMON_DATA_OUT_TIMING {
     in "SR,CJ,%i";
 }
 
+###########################
+## Environment settings ###
+## Mostly comms settings ##
+###########################
+
 set_ENVIR_STROBE_TIME {
     out "SW,EB,%i";
     in "SW,EB";
@@ -231,6 +390,7 @@ get_ENVIR_STROBE_TIME {
     in "SR,EB,%i";
 }
 
+# 1 only if used with CB-A30
 set_ENVIR_CABLE_EXPANSION {
     out "SW,EC,%i";
     in "SW,EC";
@@ -241,6 +401,7 @@ get_ENVIR_CABLE_EXPANSION {
     in "SR,EC,%i";
 }
 
+# 0:Console switching, 1:Terminal switching
 set_ENVIR_PROG_SWITCH {
     out "SW,EF,%i";
     in "SW,EF"
@@ -251,6 +412,7 @@ get_ENVIR_PROG_SWITCH {
     in "SR,EF,%i"
 }
 
+# 0 to not save operations to flash (to preserve lifetime), 1 to save
 set_ENVIR_SAVE {
     out "SW,EG,%i";
     in "SW,EG";
@@ -261,96 +423,3 @@ get_ENVIR_SAVE {
     in "SW,EG,%i";
 }
 
-set_MEAS_screen {
-    out "DC,%i";
-    in "DC";
-}
-
-get_MEAS_all {
-    out "MA";
-    in "MA,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i";
-}
-
-trigger_INPUT {
-    out "S%i";
-    in "S%i";
-}
-
-set_AUTO_ZERO_ON {
-    out "VM,%i";
-    in "VM,%i";
-}
-
-set_AUTO_ZERO_ON_ALL {
-    out "VA";
-    in "VA";
-}
-
-set_AUTO_ZERO_OFF {
-    out "WM,%i";
-    in "WM,%i";
-}
-
-set_AUTO_ZERO_OFF_ALL {
-    out "WA";
-    in "WA";
-}
-
-set_TIMING_INPUT {
-    out "TM,%i,%i";
-    in "TM,%i,%i";
-}
-
-set_TIMING_1 {
-    out "T1,%i";
-    in "T1,%i";
-}
-
-RESET {
-    out "VR";
-    in "VR";
-}
-
-set_KEYLOCK {
-    out "KL,%i";
-    in "KL";
-}
-
-get_PROGRAM_NO {
-    out "PR";
-    in "PR,%i";
-}
-
-set_PROGRAM_NO {
-    out "PW,%i";
-    in "PW";
-}
-
-set_MEMCARD_PROGRAM_NO {
-    out "PC,%i,%i";
-    in "PC";
-}
-
-start_STORAGE {
-    out "AS";
-    in "AS";
-}
-
-stop_STORAGE {
-    out "AP";
-    in "AP";
-}
-
-init_STORAGE {
-    out "AQ";
-    in "AQ";
-}
-
-get_STORAGE_STATE {
-    out "AN";
-    in "AN,%i,%i";
-}
-
-get_STORAGE_DATE {
-    out "AD,%i";
-    in "AD,%i,
