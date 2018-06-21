@@ -211,16 +211,6 @@ get_COMMON_IMAGE_STORAGE {
     in "SR,CH,%i,%i";
 }
 
-set_COMMON_AUTO_SEND {
-    out "SW,CI,%i";
-    in "SW,CI,%i";
-}
-
-get_COMMON_AUTO_SEND {
-    out "SR,CI";
-    in "SR,CI,%i";
-}
-
 set_COMMON_DATA_OUT_TIMING {
     out "SW,CJ,%i";
     in "SW,CJ";
@@ -229,6 +219,46 @@ set_COMMON_DATA_OUT_TIMING {
 get_COMMON_DATA_OUT_TIMING {
     out "SR,CJ";
     in "SR,CJ,%i";
+}
+
+set_ENVIR_STROBE_TIME {
+    out "SW,EB,%i";
+    in "SW,EB";
+}
+
+get_ENVIR_STROBE_TIME {
+    out "SR,EB";
+    in "SR,EB,%i";
+}
+
+set_ENVIR_CABLE_EXPANSION {
+    out "SW,EC,%i";
+    in "SW,EC";
+}
+
+get_ENVIR_CABLE_EXPANSION {
+    out "SR,EC";
+    in "SR,EC,%i";
+}
+
+set_ENVIR_PROG_SWITCH {
+    out "SW,EF,%i";
+    in "SW,EF"
+}
+
+get_ENVIR_PROG_SWITCH {
+    out "SR,EF";
+    in "SR,EF,%i"
+}
+
+set_ENVIR_SAVE {
+    out "SW,EG,%i";
+    in "SW,EG";
+}
+
+get_ENVIR_SAVE {
+    out "SW,EG";
+    in "SW,EG,%i";
 }
 
 set_MEAS_screen {
