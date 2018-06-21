@@ -1,0 +1,326 @@
+Terminator = CR;
+
+# /// Gets the device ID
+getIDN {
+    out "*IDN?";
+    in "%\$1[^\r\n]";
+    ExtraInput = Ignore;
+}
+
+###################
+## HEAD SETTINGS ##
+###################
+
+set_TRIGGER_MODE {
+    out "SW,HA,%i";
+    in "SW,HA";
+}
+
+get_TRIGGER_MODE {
+    out "SR,HA";
+    in "SR,HA,%i";
+}
+
+set_INTERFERENCE_PREVENTION {
+    out "SW,HB,%i";
+    in "SW,HB";
+}
+
+get_INTERFERENCE_PREVENTION {
+    out "SR,HB";
+    in "SR,HB,%i";
+}
+
+set_TRIGGER_RATE {
+    out "SW,HC,%i";
+    in "SW,HC";
+}
+
+get_TRIGGER_RATE {
+    out "SR,HC";
+    in "SR,HC";
+}
+
+set_MEAS_RANGE {
+    out "SW,HD,%i,%i,%i";
+    in "SW,HD";
+}
+
+get_MEAS_RANGE {
+    out "SR,HD,%i";
+    in "SR,HD,%i,%i,%i";
+}
+
+set_THRESHOLD_VALUE {
+    out "SW,HE,%i,%i";
+    in "SW,HE";
+}
+
+get_THRESHOLD_VALUE {
+    out "SR,HE,%i";
+    in "SR,HE,%i,%i";
+}
+
+set_OUT_AVERAGE {
+    out "SW,OA,%i,%i";
+    in "SW,OA";
+}
+
+get_OUT_AVERAGE {
+    out "SR,OA,%i";
+    in "SR,OA,%i,%i";
+}
+
+set_OUT_ALARM {
+    out "SW,OB,%i,%i";
+    in "SW,OB";
+}
+
+get_OUT_ALARM {
+    out "SR,OB,%i";
+    in "SR,OB,%i,%i";
+}
+
+set_OUT_MEAS_MODE {
+    out "SW,OC,%i,%i";
+    in "SW,OC";
+}
+
+get_OUT_MEAS_MODE {
+    out "SR,OC,%i";
+    in "SR,OC,%i,%i";
+}
+
+set_OUT_OFFSET {
+    out "SW,OD,%i,%i";
+    in "SW,OD";
+}
+
+get_OUT_OFFSET {
+    out "SR,OD,%i";
+    in "SR,OD,%i,%i";
+}
+
+set_OUT_MIN_DISPLAY_UNIT {
+    out "SW,OE,%i,%i";
+    in "SW,OE";
+}
+
+get_OUT_MIN_DISPLAY_UNIT {
+    out "SR,OE,%i";
+    in "SR,OE,%i,%i";
+}
+
+set_OUT_SCALING {
+    out "SW,OF,%i,%i,%i,%i";
+    in "SW,OF";
+}
+
+get_OUT_SCALING {
+    out "SR,OF,%i";
+    in "SR,OF,%i,%i,%i,%i,%i";
+}
+
+set_OUT_TOLERANCE {
+    out "SW,LM,%i,%i,%i";
+    in "SW,LM";
+}
+
+get_OUT_TOLERANCE {
+    out "SR,LM,%i";
+    in "SR,LM,%i,%i,%i";
+}
+
+set_COMMON_TIMING {
+    out "SW,CA,%i";
+    in "SW,CA";
+}
+
+get_COMMON_TIMING {
+    out "SR,CA";
+    in "SR,CA,%i";
+}
+
+set_COMMON_ZERO {
+    out "SW,CB,%i";
+    in "SW,CB";
+}
+
+get_COMMON_ZERO {
+    out "SR,CB";
+    in "SR,CB,%i";
+}
+
+set_COMMON_BINARY_OUT {
+    out "SW,CC,%i,%i";
+    in "SW,CC";
+}
+
+get_COMMON_BINARY_OUT {
+    out "SR,CC";
+    in "SR,CC,%i,%i";
+}
+
+set_COMMON_ANALOG_OUT {
+    out "SW,CD,%i,%i";
+    in "SW,CD,%i";
+}
+
+get_COMMON_ANALOG_OUT {
+    out "SR,CD,%i";
+    in "SR,CD,%i,%i";
+}
+
+set_COMMON_ANALOG_SCALE {
+    out "SW,CE,%i,%i,%i,%i,%i";
+    in "SW,CE";
+}
+
+get_COMMON_ANALOG_SCALE {
+    out "SR,CE,%i";
+    in "SR,CE,%i,%i,%i,%i,%i";
+}
+
+set_COMMON_STORAGE_TYPE {
+    out "SW,CF,%i";
+    in "SW,CF";
+}
+
+get_COMMON_STORAGE_TYPE {
+    out "SR,CF";
+    in "SR,CF,%i";
+}
+
+set_COMMON_DATA_STORAGE {
+    out "SW,CG,%i,%i";
+    in "SW,CG";
+}
+
+get_COMMON_DATA_STORAGE {
+    out "SR,CG";
+    in "SR,CG,%i,%i";
+}
+
+set_COMMON_IMAGE_STORAGE {
+    out "SW,CH,%i,%i";
+    in "SW,CH";
+}
+
+get_COMMON_IMAGE_STORAGE {
+    out "SR,CH";
+    in "SR,CH,%i,%i";
+}
+
+set_COMMON_AUTO_SEND {
+    out "SW,CI,%i";
+    in "SW,CI,%i";
+}
+
+get_COMMON_AUTO_SEND {
+    out "SR,CI";
+    in "SR,CI,%i";
+}
+
+set_COMMON_DATA_OUT_TIMING {
+    out "SW,CJ,%i";
+    in "SW,CJ";
+}
+
+get_COMMON_DATA_OUT_TIMING {
+    out "SR,CJ";
+    in "SR,CJ,%i";
+}
+
+set_MEAS_screen {
+    out "DC,%i";
+    in "DC";
+}
+
+get_MEAS_all {
+    out "MA";
+    in "MA,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i";
+}
+
+trigger_INPUT {
+    out "S%i";
+    in "S%i";
+}
+
+set_AUTO_ZERO_ON {
+    out "VM,%i";
+    in "VM,%i";
+}
+
+set_AUTO_ZERO_ON_ALL {
+    out "VA";
+    in "VA";
+}
+
+set_AUTO_ZERO_OFF {
+    out "WM,%i";
+    in "WM,%i";
+}
+
+set_AUTO_ZERO_OFF_ALL {
+    out "WA";
+    in "WA";
+}
+
+set_TIMING_INPUT {
+    out "TM,%i,%i";
+    in "TM,%i,%i";
+}
+
+set_TIMING_1 {
+    out "T1,%i";
+    in "T1,%i";
+}
+
+RESET {
+    out "VR";
+    in "VR";
+}
+
+set_KEYLOCK {
+    out "KL,%i";
+    in "KL";
+}
+
+get_PROGRAM_NO {
+    out "PR";
+    in "PR,%i";
+}
+
+set_PROGRAM_NO {
+    out "PW,%i";
+    in "PW";
+}
+
+set_MEMCARD_PROGRAM_NO {
+    out "PC,%i,%i";
+    in "PC";
+}
+
+start_STORAGE {
+    out "AS";
+    in "AS";
+}
+
+stop_STORAGE {
+    out "AP";
+    in "AP";
+}
+
+init_STORAGE {
+    out "AQ";
+    in "AQ";
+}
+
+get_STORAGE_STATE {
+    out "AN";
+    in "AN,%i,%i";
+}
+
+get_STORAGE_DATE {
+    out "AD,%i";
+    in "AD,%i,
