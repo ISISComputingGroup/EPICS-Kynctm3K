@@ -1,4 +1,5 @@
-Terminator = CR;
+InTerminator = CR;
+OutTerminator = CR;
 
 # /// Gets the device ID
 getIDN {
@@ -12,6 +13,11 @@ getIDN {
 ## Commands for taking measurements and ##
 ### switching between measurement modes ##
 ##########################################
+
+get_HELLO_WORLD {
+    out "hello";
+    in "%s";
+}
 
 #### THESE COMMANDS CAN ONLY BE ACCEPTED WHEN ####
 ####   THE MEASUREMENT SCREEN IS DISPLAYED    ####
