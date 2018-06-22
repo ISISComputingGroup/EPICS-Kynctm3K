@@ -47,3 +47,7 @@ record(stringin, "$(P)STATUS:RAW")
     field(SCAN, "1 second")
     field(FLNK, "$(P)STATUS:PARSE")
 }
+
+record(stringin, "$(P)STATUS")
+{
+}

@@ -13,7 +13,7 @@ LIBRARY_IOC += KYNCTM3K
 KYNCTM3K_DBD += asyn.dbd
 KYNCTM3K_DBD += asubFunctions.dbd
 
-KYNCTM3K_SRCS += keyence.c 
+KYNCTM3K_SRCS += keyence.c keyence_impl.cpp
 
 KYNCTM3K_LIBS += $(EPICS_BASE_IOC_LIBS)
 KYNCTM3K_LIBS += asyn utilities
