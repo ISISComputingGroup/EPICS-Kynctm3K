@@ -1,0 +1,65 @@
+##################################
+## DB file for Keyence TM-3001P ##
+##                              ##
+##          ISIS 2018           ##
+##################################
+
+record(bo, "$(P)SIM")
+{
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+    field(VAL, "$(RECSIM=0)")
+}
+
+record(bo, "$(P)DISABLE")
+{
+    field(DESC, "Disable comms")
+    field(PINI, "YES")
+    field(ZNAM, "COMMS ENABLED")
+    field(ONAM, "COMMS DISABLED")
+    field(VAL, "$(DISABLE=0)")
+    field(OMSL, "supervisory")
+}
+
+#############################################
+## Records to parse the measurement output ##
+#############################################
+
+record(ao, "$(P)MEAS:REQUEST")
+{
+    field(DESC, "Sends measurement requests")
+    field(SCAN, ".5 second")
+    field(OUT, "@kynctm3k.proto send_OUTPUT_REQ $(PORT)")
+    field(DTYP, "stream")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:MEAS:REQUEST")
+    field(SDIS, "$(P)DISABLE")
+}
+
+record(ai, "$(P)SIM:MEAS:REQUEST")
+{
+    field(SCAN, "Passive")
+    field(DTYP, "Soft channel")
+}
+
+record(ai, "$(P)MEAS:OUT:$(CHAN)")
+{
+    field(DESC, "Gets the measured value for OUT $(CHAN)")
+    field(SCAN, "I/O Intr")
+    field(EGU, "mm")
+    field(INP, "@kynctm3k.proto get_OUTPUT_DATA($(CHAN)) $(PORT)")
+    field(DTYP, "stream")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:MEAS:OUT:$(CHAN)")
+    field(SDIS, "$(P)DISABLE")
+    field(INTEREST, "HIGH")
+    field(archive, "YES")
+}
+
+record(ai, "$(P)SIM:MEAS:OUT:$(CHAN)")
+{
+    field(SCAN, "Passive")
+    field(DTYP, "Soft channel")
+}
