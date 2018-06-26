@@ -31,23 +31,45 @@ record(aSub, "$(P)STATUS:PARSE")
 
     field(SNAM, "keyence_status_parse")
     field(INPA, "$(P)STATUS:RAW")
-    field(FTA, "STRING")
-    field(NOA, "1")
+    field(FTA, "CHAR")
+    field(NOA, "256")
+    field(PINI, "YES")
+
+    field(INPB, "$(P)STATUS:RAW.NORD")
+    field(FTB, "LONG")
 
     field(OUTA, "$(P)STATUS PP")
     field(FTVA, "STRING")
 
+    field(OUTB, "$(P)MEAS:OUT1")
+    field(FTVB, "DOUBLE")
+
 }
 
-record(stringin, "$(P)STATUS:RAW")
+record(waveform, "$(P)STATUS:RAW")
 {
     field(DESC, "Reads from the device")
     field(DTYP, "stream")
-    field(INP, "@kynctm3k.proto get_HELLO_WORLD $(PORT)")
+    field(FTVL, "CHAR")
+    field(NELM, "400")
+    field(INP, "@kynctm3k.proto get_OUTPUT_DATA $(PORT)")
     field(SCAN, "1 second")
     field(FLNK, "$(P)STATUS:PARSE")
 }
 
 record(stringin, "$(P)STATUS")
 {
+}
+
+record(ai, "(P)MEAS:OUT1")
+{
+    field(DESC, "Holds the first output measurement")
+    field(EGU, "mm")
+    field(PREC, "3")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:MEAS:OUT1")
+    field(SDIS, "$(P)DISABLE")
+	field(PREC, "3")
+	info(INTEREST, "HIGH")
+	info(archive, "VAL")
 }
