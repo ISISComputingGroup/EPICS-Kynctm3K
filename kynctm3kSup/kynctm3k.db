@@ -25,51 +25,85 @@ record(bo, "$(P)DISABLE")
 ## Records to parse the measurement output ##
 #############################################
 
-record(aSub, "$(P)STATUS:PARSE")
+record(ao, "$(P)MEAS:REQUEST")
 {
-    field(DESC, "Parses the measurement values output")
-
-    field(SNAM, "keyence_status_parse")
-    field(INPA, "$(P)STATUS:RAW")
-    field(FTA, "CHAR")
-    field(NOA, "256")
-    field(PINI, "YES")
-
-    field(INPB, "$(P)STATUS:RAW.NORD")
-    field(FTB, "LONG")
-
-    field(OUTA, "$(P)STATUS PP")
-    field(FTVA, "STRING")
-
-    field(OUTB, "$(P)MEAS:OUT1")
-    field(FTVB, "DOUBLE")
-
-}
-
-record(waveform, "$(P)STATUS:RAW")
-{
-    field(DESC, "Reads from the device")
-    field(DTYP, "stream")
-    field(FTVL, "CHAR")
-    field(NELM, "400")
-    field(INP, "@kynctm3k.proto get_OUTPUT_DATA $(PORT)")
+    field(DESC, "Sends a measurement request")
     field(SCAN, "1 second")
-    field(FLNK, "$(P)STATUS:PARSE")
+    field(OUT, "@kynctm3k.proto send_OUTPUT_REQ $(PORT)")
+    field(DTYP, "stream")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:MEAS:REQUEST")
+    field(SDIS, "$(P)DISABLE")
 }
 
-record(stringin, "$(P)STATUS")
+record(ai, "$(P)MEAS:OUT1")
 {
-}
-
-record(ai, "(P)MEAS:OUT1")
-{
-    field(DESC, "Holds the first output measurement")
-    field(EGU, "mm")
-    field(PREC, "3")
+    field(SCAN, "I/O Intr")
+    field(INP, "@kynctm3k.proto get_OUTPUT_DATA(01) $(PORT)")
+    field(DTYP, "stream")
+    field(DESC, "Gets the measured value for OUT1")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:MEAS:OUT1")
     field(SDIS, "$(P)DISABLE")
-	field(PREC, "3")
-	info(INTEREST, "HIGH")
-	info(archive, "VAL")
 }
+
+record(ai, "$(P)MEAS:OUT2")
+{
+    field(SCAN, "I/O Intr")
+    field(INP, "@kynctm3k.proto get_OUTPUT_DATA(02) $(PORT)")
+    field(DTYP, "stream")
+    field(DESC, "Gets the measured value for OUT2")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:MEAS:OUT2")
+    field(SDIS, "$(P)DISABLE")
+}
+
+
+#record(aSub, "$(P)STATUS:PARSE")
+#{
+#    field(DESC, "Parses the measurement values output")
+#
+#    field(SNAM, "keyence_status_parse")
+#    field(INPA, "$(P)STATUS:RAW")
+#    field(FTA, "CHAR")
+#    field(NOA, "256")
+#    field(PINI, "YES")
+#
+#    field(INPB, "$(P)STATUS:RAW.NORD")
+#    field(FTB, "LONG")
+#
+#    field(OUTA, "$(P)STATUS PP")
+#    field(FTVA, "STRING")
+#
+#    field(OUTB, "$(P)MEAS:OUT1")
+#    field(FTVB, "DOUBLE")
+#
+#}
+#
+#record(waveform, "$(P)STATUS:RAW")
+#{
+#    field(DESC, "Reads from the device")
+#    field(DTYP, "stream")
+#    field(FTVL, "CHAR")
+#    field(NELM, "400")
+#    field(INP, "@kynctm3k.proto get_OUTPUT_DATA $(PORT)")
+#    field(SCAN, "1 second")
+#    field(FLNK, "$(P)STATUS:PARSE")
+#}
+#
+#record(stringin, "$(P)STATUS")
+#{
+#}
+#
+#record(ai, "(P)MEAS:OUT1")
+#{
+#    field(DESC, "Holds the first output measurement")
+#    field(EGU, "mm")
+#    field(PREC, "3")
+#    field(SIML, "$(P)SIM")
+#    field(SIOL, "$(P)SIM:MEAS:OUT1")
+#    field(SDIS, "$(P)DISABLE")
+#	field(PREC, "3")
+#	info(INTEREST, "HIGH")
+#	info(archive, "VAL")
+#}

@@ -19,9 +19,12 @@ get_HELLO_WORLD {
     in "%#s";
 }
 
-get_OUTPUT_DATA {
+send_OUTPUT_REQ {
     out "MA";
-    in "%300s";
+}
+
+get_OUTPUT_DATA {
+    in "TG,\$1,%f";
 }
 
 ##### THESE COMMANDS CAN ONLY BE ACCEPTED WHEN ####
