@@ -22,25 +22,37 @@ std::vector<std::string> parseInput(const std::string& input)
  * Input: input, the raw string from the device
  * Output: channelwise_output, a vector of strings containing the individual outputs from each channel
 **/
-    const int channel_string_length = 14;
+    const int channel_string_length = 9;
     std::vector<std::string> channelwise_output;
 
-    unsigned int numberOfChannels = floor(sizeof(input)/channel_string_length);
+    unsigned int numberOfChannels = round(input.length()/channel_string_length);
 
-    std::cout << numberOfChannels << std::endl;
+    std::cout << "Number of channels: "<< input << numberOfChannels << std::endl;
 
     // This assumes that the length of the array will be exactly as long as the number of outputs we have, which is not going to be the case?
     for(unsigned int i=0;i<numberOfChannels;i++)
     {
         std::cout << i << std::endl;
         try {
-            channelwise_output.push_back (input.substr(i*channel_string_length, ((i+1)*channel_string_length)-1));
+            channelwise_output.push_back (input.substr((i*channel_string_length)+1, channel_string_length-1));
         } catch (std::out_of_range) {
             puts("Caught out of range error");
         }
     }
 
 	return channelwise_output;
+}
+
+std::string get_channel_indentifiers(char* raw_rec)
+{
+    std::string channel_identifiers;
+
+    for(unsigned int i=3;i<19;i++)
+    {
+        channel_identifiers.push_back(raw_rec[i]);
+    }
+
+    return channel_identifiers;
 }
 
 std::string get_str_from_epics(char* raw_rec, long stringLength)
@@ -61,9 +73,15 @@ std::string get_str_from_epics(char* raw_rec, long stringLength)
     return str;
 }
 
-float get_channel_value(const std::string& channel_string)
+double get_channel_value(const std::string& channel_string)
 {
-	return std::stof (channel_string.substr(6,13));
+    if (std::string::npos != channel_string.find("F")) {
+        return NAN;
+    } else if (std::string::npos != channel_string.find("X")){
+        return NAN;
+    } else {
+	    return std::stof (channel_string);
+	}
 }
 
 unsigned int get_channel_number(const std::string& channel_string)
@@ -73,34 +91,50 @@ unsigned int get_channel_number(const std::string& channel_string)
 
 
 /**
- *  
+ *
  */
 long keyence_status_parse_impl(aSubRecord* prec)
 {
     try {
     std::vector<std::string> split_strings;
+    std::string channel_identifiers;
 
-    long inputLength = 0;//*(long*)prec->b;
+    long inputLength = *(long*)prec->b;
+
+    double firstvalue, secondvalue;
 
     std::cout << "\nString1 " << (char*)prec->a << std::endl;
-    std::cout << "\nString Length " << *(long*)prec->b << std::endl;
+    //std::cout << "\nString Length " << *(long*)prec->b << std::endl;
     std::cout << "\nString Length " << inputLength << std::endl;
 
 
     if (inputLength > 0) {
+    std::cout << "\nString Length " << inputLength << std::endl;
     split_strings = parseInput(get_str_from_epics((char*)prec->a, inputLength));
     //split_strings = parseInput(get_str_from_epics((char*)prec->a, *(long*) prec->b));
 
 
     for (unsigned int i=0; i<split_strings.size(); i++)
     {
-        std::cout << "\nRecreated strings " << split_strings[0] << std::endl;
+        std::cout << "\ndouble strings " << get_channel_value(split_strings[i]) << i << std::endl;
     }
 
 
-    prec->vala = prec->a;
 
-    *(float*)prec->valb = get_channel_value(split_strings[0].c_str());
+    //prec->vala = prec->a;
+
+    firstvalue = get_channel_value(split_strings[0]);
+    secondvalue = get_channel_value(split_strings[1]);
+
+    std::cout << "abc " << firstvalue << std::endl;
+    std::cout << "abc " << secondvalue << std::endl;
+
+    *(double*)prec->vala = get_channel_value(split_strings[0]);
+    *(double*)prec->valb = get_channel_value(split_strings[1]);
+
+
+    std::cout << "abc " << *(double*)prec->vala << std::endl;
+
     }
     } catch (std::exception &e) {
         std::cout << e.what();

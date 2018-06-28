@@ -19,6 +19,11 @@ get_HELLO_WORLD {
     in "%#s";
 }
 
+get_MEASUREMENTS {
+    out "MM,1111111111111111";
+    in "MM,1111111111111111%s";
+}
+
 send_OUTPUT_REQ {
     out "MA";
 }
