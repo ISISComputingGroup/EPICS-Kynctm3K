@@ -25,40 +25,6 @@ record(bo, "$(P)DISABLE")
 ## Records to parse the measurement output ##
 #############################################
 
-#record(ao, "$(P)MEAS:REQUEST")
-#{
-#    field(DESC, "Sends a measurement request")
-#    field(SCAN, "1 second")
-#    field(OUT, "@kynctm3k.proto send_OUTPUT_REQ $(PORT)")
-#    field(DTYP, "stream")
-#    field(SIML, "$(P)SIM")
-#    field(SIOL, "$(P)SIM:MEAS:REQUEST")
-#    field(SDIS, "$(P)DISABLE")
-#}
-#
-#record(ai, "$(P)MEAS:OUT1")
-#{
-#    field(SCAN, "I/O Intr")
-#    field(INP, "@kynctm3k.proto get_OUTPUT_DATA(01) $(PORT)")
-#    field(DTYP, "stream")
-#    field(DESC, "Gets the measured value for OUT1")
-#    field(SIML, "$(P)SIM")
-#    field(SIOL, "$(P)SIM:MEAS:OUT1")
-#    field(SDIS, "$(P)DISABLE")
-#}
-#
-#record(ai, "$(P)MEAS:OUT2")
-#{
-#    field(SCAN, "I/O Intr")
-#    field(INP, "@kynctm3k.proto get_OUTPUT_DATA(02) $(PORT)")
-#    field(DTYP, "stream")
-#    field(DESC, "Gets the measured value for OUT2")
-#    field(SIML, "$(P)SIM")
-#    field(SIOL, "$(P)SIM:MEAS:OUT2")
-#    field(SDIS, "$(P)DISABLE")
-#}
-#
-
 record(aSub, "$(P)STATUS:PARSE")
 {
     field(DESC, "Parses the measurement values output")
@@ -73,9 +39,6 @@ record(aSub, "$(P)STATUS:PARSE")
 
     field(INPB, "$(P)STATUS:RAW.NORD")
     field(FTB, "LONG")
-
-    #field(OUTA, "$(P)STATUS PP")
-    #field(FTVA, "STRING")
 
     field(OUTA, "$(P)MEAS:OUT:01")
     field(FTVA, "DOUBLE")
@@ -154,15 +117,3 @@ record(ai, "$(P)MEAS:OUT:$(CHAN)")
 	info(INTEREST, "HIGH")
 	info(archive, "VAL")
 }
-#record(ai, "$(P)MEAS:OUT:02")
-#{
-#    field(DESC, "Holds the second output measurement")
-#    field(EGU, "mm")
-#    field(PREC, "3")
-#    field(SIML, "$(P)SIM")
-#    field(SIOL, "$(P)SIM:MEAS:OUT:02")
-#    field(SDIS, "$(P)DISABLE")#
-#	field(PREC, "3")
-#	info(INTEREST, "HIGH")
-#	info(archive, "VAL")
-#}
