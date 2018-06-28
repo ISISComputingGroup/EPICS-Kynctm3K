@@ -1,7 +1,5 @@
 ##################################
 ## DB file for Keyence TM-3001P ##
-##                              ##
-##          ISIS 2018           ##
 ##################################
 
 record(bo, "$(P)SIM")
@@ -27,39 +25,144 @@ record(bo, "$(P)DISABLE")
 ## Records to parse the measurement output ##
 #############################################
 
-record(ao, "$(P)MEAS:REQUEST")
+#record(ao, "$(P)MEAS:REQUEST")
+#{
+#    field(DESC, "Sends a measurement request")
+#    field(SCAN, "1 second")
+#    field(OUT, "@kynctm3k.proto send_OUTPUT_REQ $(PORT)")
+#    field(DTYP, "stream")
+#    field(SIML, "$(P)SIM")
+#    field(SIOL, "$(P)SIM:MEAS:REQUEST")
+#    field(SDIS, "$(P)DISABLE")
+#}
+#
+#record(ai, "$(P)MEAS:OUT1")
+#{
+#    field(SCAN, "I/O Intr")
+#    field(INP, "@kynctm3k.proto get_OUTPUT_DATA(01) $(PORT)")
+#    field(DTYP, "stream")
+#    field(DESC, "Gets the measured value for OUT1")
+#    field(SIML, "$(P)SIM")
+#    field(SIOL, "$(P)SIM:MEAS:OUT1")
+#    field(SDIS, "$(P)DISABLE")
+#}
+#
+#record(ai, "$(P)MEAS:OUT2")
+#{
+#    field(SCAN, "I/O Intr")
+#    field(INP, "@kynctm3k.proto get_OUTPUT_DATA(02) $(PORT)")
+#    field(DTYP, "stream")
+#    field(DESC, "Gets the measured value for OUT2")
+#    field(SIML, "$(P)SIM")
+#    field(SIOL, "$(P)SIM:MEAS:OUT2")
+#    field(SDIS, "$(P)DISABLE")
+#}
+#
+
+record(aSub, "$(P)STATUS:PARSE")
 {
-    field(DESC, "Sends measurement requests")
-    field(SCAN, ".5 second")
-    field(OUT, "@kynctm3k.proto send_OUTPUT_REQ $(PORT)")
-    field(DTYP, "stream")
-    field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:MEAS:REQUEST")
-    field(SDIS, "$(P)DISABLE")
+    field(DESC, "Parses the measurement values output")
+    field(PINI, "YES")
+
+    field(SNAM, "keyence_status_parse")
+
+    field(INPA, "$(P)STATUS:RAW")
+    field(FTA, "CHAR")
+    field(NOA, "512")
+
+
+    field(INPB, "$(P)STATUS:RAW.NORD")
+    field(FTB, "LONG")
+
+    #field(OUTA, "$(P)STATUS PP")
+    #field(FTVA, "STRING")
+
+    field(OUTA, "$(P)MEAS:OUT:01")
+    field(FTVA, "DOUBLE")
+
+    field(OUTB, "$(P)MEAS:OUT:02")
+    field(FTVB, "DOUBLE")
+
+    field(OUTC, "$(P)MEAS:OUT:03")
+    field(FTVC, "DOUBLE")
+
+    field(OUTD, "$(P)MEAS:OUT:04")
+    field(FTVD, "DOUBLE")
+
+    field(OUTE, "$(P)MEAS:OUT:05")
+    field(FTVE, "DOUBLE")
+
+    field(OUTF, "$(P)MEAS:OUT:06")
+    field(FTVF, "DOUBLE")
+
+    field(OUTG, "$(P)MEAS:OUT:07")
+    field(FTVG, "DOUBLE")
+
+    field(OUTH, "$(P)MEAS:OUT:08")
+    field(FTVH, "DOUBLE")
+
+    field(OUTI, "$(P)MEAS:OUT:09")
+    field(FTVI, "DOUBLE")
+
+    field(OUTJ, "$(P)MEAS:OUT:10")
+    field(FTVJ, "DOUBLE")
+
+    field(OUTK, "$(P)MEAS:OUT:11")
+    field(FTVK, "DOUBLE")
+
+    field(OUTL, "$(P)MEAS:OUT:12")
+    field(FTVL, "DOUBLE")
+
+    field(OUTM, "$(P)MEAS:OUT:13")
+    field(FTVM, "DOUBLE")
+
+    field(OUTN, "$(P)MEAS:OUT:14")
+    field(FTVN, "DOUBLE")
+
+    field(OUTO, "$(P)MEAS:OUT:15")
+    field(FTVO, "DOUBLE")
+
+    field(OUTP, "$(P)MEAS:OUT:16")
+    field(FTVP, "DOUBLE")
+
 }
 
-record(ai, "$(P)SIM:MEAS:REQUEST")
+record(waveform, "$(P)STATUS:RAW")
 {
-    field(SCAN, "Passive")
-    field(DTYP, "Soft channel")
+    field(DESC, "Reads from the device")
+    field(DTYP, "stream")
+    field(FTVL, "CHAR")
+    field(NELM, "512")
+    field(INP, "@kynctm3k.proto get_MEASUREMENTS $(PORT)")
+    field(SCAN, "1 second")
+    field(FLNK, "$(P)STATUS:PARSE")
+}
+
+record(stringin, "$(P)STATUS")
+{
 }
 
 record(ai, "$(P)MEAS:OUT:$(CHAN)")
 {
-    field(DESC, "Gets the measured value for OUT $(CHAN)")
-    field(SCAN, "I/O Intr")
+    field(DESC, "Holds an output measurement")
     field(EGU, "mm")
-    field(INP, "@kynctm3k.proto get_OUTPUT_DATA($(CHAN)) $(PORT)")
-    field(DTYP, "stream")
+    field(PREC, "3")
     field(SIML, "$(P)SIM")
     field(SIOL, "$(P)SIM:MEAS:OUT:$(CHAN)")
     field(SDIS, "$(P)DISABLE")
-    field(INTEREST, "HIGH")
-    field(archive, "YES")
+	field(PREC, "3")
+	info(INTEREST, "HIGH")
+	info(archive, "VAL")
 }
-
-record(ai, "$(P)SIM:MEAS:OUT:$(CHAN)")
-{
-    field(SCAN, "Passive")
-    field(DTYP, "Soft channel")
-}
+#record(ai, "$(P)MEAS:OUT:02")
+#{
+#    field(DESC, "Holds the second output measurement")
+#    field(EGU, "mm")
+#    field(PREC, "3")
+#    field(SIML, "$(P)SIM")
+#    field(SIOL, "$(P)SIM:MEAS:OUT:02")
+#    field(SDIS, "$(P)DISABLE")#
+#	field(PREC, "3")
+#	info(INTEREST, "HIGH")
+#	info(archive, "VAL")
+#}
