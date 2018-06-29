@@ -76,10 +76,15 @@ double get_channel_value(const std::string& channel_string)
  * Output: float, The value contained within the channel string or NaN.
  */
 
-    if (std::string::npos != channel_string.find("F")) {
-        return NAN;
+    if (std::string::npos != channel_string.find("+F")) {
+        return std::numeric_limits<double>::infinity();
+
+    } else if (std::string::npos != channel_string.find("-F")) {
+        return -std::numeric_limits<double>::infinity();
+
     } else if (std::string::npos != channel_string.find("X")){
         return NAN;
+
     } else {
 	    return std::stof (channel_string);
 	}
