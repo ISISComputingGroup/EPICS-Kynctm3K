@@ -22,6 +22,8 @@ std::vector<std::string> parseInput(const std::string& input)
  * Input: input, the raw string from the device
  * Output: channelwise_output, a vector of strings containing the individual outputs from each channel
 **/
+
+    // 9 characters includes the 7 digit characters, (+/-), and a leading comma for each channel
     const int channel_string_length = 9;
     std::vector<std::string> channelwise_output;
 
@@ -36,48 +38,44 @@ std::vector<std::string> parseInput(const std::string& input)
         try {
             channelwise_output.push_back (input.substr((i*channel_string_length)+1, channel_string_length-1));
         } catch (std::out_of_range) {
-            puts("Caught out of range error");
+            puts("Caught out of range error, device output string too short?");
         }
     }
 
 	return channelwise_output;
 }
 
-
-/*
-std::string get_channel_indentifiers(char* raw_rec)
-{
-    std::string channel_identifiers;
-
-    for(unsigned int i=3;i<19;i++)
-    {
-        channel_identifiers.push_back(raw_rec[i]);
-    }
-
-    return channel_identifiers;
-}
-*/
-
 std::string get_str_from_epics(char* raw_rec, long stringLength)
 {
-    //char** rec = reinterpret_cast<char**>(raw_rec);
-    std::string str;
+/**
+ * Builds up a std::string given an input char* from EPICS record
+ * Inputs: char* raw_rec, the raw string from the epics record
+ *         long stringLength, the number of characters in the string (from NORD waveform field)
+ *
+ * Output: str, the std::string representation of raw_rec
+ */
 
-    std::cout << "THE RAW STRING IS " << raw_rec << std::endl;
+    std::string str;
 
     for (int i = 0; i < stringLength; i++) {
 
-            //std::cout << raw_rec[i] << std::endl;
             str.push_back(raw_rec[i]);
     }
-
-    std::cout << "THE NEW STRING IS " << str << std::endl;
 
     return str;
 }
 
 double get_channel_value(const std::string& channel_string)
 {
+/**
+ * Converts each string segment to Float.
+ * A string of (+/-)FFFFFFF denotes an out of range measurment. NaN is returned in this case.
+ * A string of XXXXXXXX denotes an output which is turned off. NaN is returned in this case.
+ *
+ * Input: std::string channel_string, The string output of the channel
+ * Output: float, The value contained within the channel string or NaN.
+ */
+
     if (std::string::npos != channel_string.find("F")) {
         return NAN;
     } else if (std::string::npos != channel_string.find("X")){
@@ -87,71 +85,44 @@ double get_channel_value(const std::string& channel_string)
 	}
 }
 
-unsigned int get_channel_number(const std::string& channel_string)
-{
-	return std::stoi (channel_string.substr(3,4));
-}
-
-
-/**
- *
- */
 long keyence_status_parse_impl(aSubRecord* prec)
+/**
+ * Parses an aSubRecord from EPICS containing the string output from a Keyence TM3001P
+ *
+ * Input: aSubRecord* prec, the input aSub record containing the data to parse
+ * Outputs: prec->vala through ->valp, the float values from the string
+ */
+
 {
     try {
     std::vector<std::string> split_strings;
 
     long inputLength = *(long*)prec->b;
 
-//    double firstvalue, secondvalue;
+    // This length comes from 16 channels, 9 characters per channel
+    if (inputLength == 16*9) {
 
-    std::cout << "\nString1 " << (char*)prec->a << std::endl;
-    //std::cout << "\nString Length " << *(long*)prec->b << std::endl;
-    std::cout << "\nString Length " << inputLength << std::endl;
+        split_strings = parseInput(get_str_from_epics((char*)prec->a, inputLength));
 
-
-    if (inputLength > 0) {
-    std::cout << "\nString Length " << inputLength << std::endl;
-    split_strings = parseInput(get_str_from_epics((char*)prec->a, inputLength));
-    //split_strings = parseInput(get_str_from_epics((char*)prec->a, *(long*) prec->b));
-
-
-    for (unsigned int i=0; i<split_strings.size(); i++)
-    {
-        std::cout << "\ndouble strings " << get_channel_value(split_strings[i]) << i << std::endl;
-    }
-
-
-
-    //prec->vala = prec->a;
-
-//    firstvalue = get_channel_value(split_strings[0]);
-//    secondvalue = get_channel_value(split_strings[1]);
-
-//    std::cout << "abc " << firstvalue << std::endl;
-//    std::cout << "abc " << secondvalue << std::endl;
-
-    *(double*)prec->vala = get_channel_value(split_strings[0]);
-    *(double*)prec->valb = get_channel_value(split_strings[1]);
-    *(double*)prec->valc = get_channel_value(split_strings[2]);
-    *(double*)prec->vald = get_channel_value(split_strings[3]);
-    *(double*)prec->vale = get_channel_value(split_strings[4]);
-    *(double*)prec->valf = get_channel_value(split_strings[5]);
-    *(double*)prec->valg = get_channel_value(split_strings[6]);
-    *(double*)prec->valh = get_channel_value(split_strings[7]);
-    *(double*)prec->vali = get_channel_value(split_strings[8]);
-    *(double*)prec->valj = get_channel_value(split_strings[9]);
-    *(double*)prec->valk = get_channel_value(split_strings[10]);
-    *(double*)prec->vall = get_channel_value(split_strings[11]);
-    *(double*)prec->valm = get_channel_value(split_strings[12]);
-    *(double*)prec->valn = get_channel_value(split_strings[13]);
-    *(double*)prec->valo = get_channel_value(split_strings[14]);
-    *(double*)prec->valp = get_channel_value(split_strings[15]);
-
-
-//    std::cout << "abc " << *(double*)prec->vala << std::endl;
+        *(double*)prec->vala = get_channel_value(split_strings[0]);
+        *(double*)prec->valb = get_channel_value(split_strings[1]);
+        *(double*)prec->valc = get_channel_value(split_strings[2]);
+        *(double*)prec->vald = get_channel_value(split_strings[3]);
+        *(double*)prec->vale = get_channel_value(split_strings[4]);
+        *(double*)prec->valf = get_channel_value(split_strings[5]);
+        *(double*)prec->valg = get_channel_value(split_strings[6]);
+        *(double*)prec->valh = get_channel_value(split_strings[7]);
+        *(double*)prec->vali = get_channel_value(split_strings[8]);
+        *(double*)prec->valj = get_channel_value(split_strings[9]);
+        *(double*)prec->valk = get_channel_value(split_strings[10]);
+        *(double*)prec->vall = get_channel_value(split_strings[11]);
+        *(double*)prec->valm = get_channel_value(split_strings[12]);
+        *(double*)prec->valn = get_channel_value(split_strings[13]);
+        *(double*)prec->valo = get_channel_value(split_strings[14]);
+        *(double*)prec->valp = get_channel_value(split_strings[15]);
 
     }
+
     } catch (std::exception &e) {
         std::cout << e.what();
 

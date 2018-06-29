@@ -1,0 +1,24 @@
+##################################################
+## Output Channels DB file for Keyence TM-3001P ##
+##################################################
+
+record(ai, "$(P)MEAS:OUT:$(CHAN)")
+{
+    field(DESC, "Holds an output measurement")
+    field(SCAN, "Passive")
+    field(EGU, "mm")
+    field(PREC, "3")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:MEAS:OUT:$(CHAN)")
+    field(SDIS, "$(P)DISABLE")
+	field(PREC, "3")
+
+	info(INTEREST, "HIGH")
+	info(archive, "VAL")
+}
+
+record(ai, "$(P)SIM:MEAS:OUT:$(CHAN)")
+{
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+}

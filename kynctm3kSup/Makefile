@@ -4,6 +4,7 @@ include $(TOP)/configure/CONFIG
 
 # Install .dbd and .db files
 DB += kynctm3k.db
+DB += kynctm3k_out_channels.db
 DATA += kynctm3k.proto
 
 DBD += keyence.dbd
