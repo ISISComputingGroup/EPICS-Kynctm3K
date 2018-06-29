@@ -2,23 +2,26 @@
 ## Output Channels DB file for Keyence TM-3001P ##
 ##################################################
 
-record(ai, "$(P)MEAS:OUT:$(CHAN)")
+record(calc, "$(P)MEAS:OUT:$(CHAN)")
 {
     field(DESC, "Holds an output measurement")
     field(SCAN, "Passive")
-    field(EGU, "mm")
+    field(EGU, "$(MEAS_UNITS)")
     field(PREC, "3")
-    field(SIML, "$(P)SIM")
-    field(SIOL, "$(P)SIM:MEAS:OUT:$(CHAN)")
-    field(SDIS, "$(P)DISABLE")
+    field(CALC, "A*1")
 	field(PREC, "3")
+	field(ASG, "READONLY")
+
+	field(HOPR, "9999999")
+	field(HIHI, "9999999")
+	field(HHSV, "MAJOR")
+
+	field(LOLO, "-9999999")
+	field(LOPR, "-9999999")
+	field(LLSV, "MAJOR")
+
 
 	info(INTEREST, "HIGH")
 	info(archive, "VAL")
 }
 
-record(ai, "$(P)SIM:MEAS:OUT:$(CHAN)")
-{
-    field(SCAN, "Passive")
-    field(DTYP, "Soft Channel")
-}
