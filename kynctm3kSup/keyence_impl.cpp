@@ -126,6 +126,9 @@ long keyence_status_parse_impl(aSubRecord* prec)
         *(double*)prec->valo = get_channel_value(split_strings[14]);
         *(double*)prec->valp = get_channel_value(split_strings[15]);
 
+    } else {
+        // String is of incorrect length
+        return 1;
     }
 
     } catch (std::exception &e) {

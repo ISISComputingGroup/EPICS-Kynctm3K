@@ -19,9 +19,21 @@ get_HELLO_WORLD {
     in "%#s";
 }
 
+unset_AUTO_SEND {
+
+    out "Q0";
+    wait 200;
+    out "SW,EA,0";
+    in "SW,EA";
+    out "R0";
+
+}
+
 get_MEASUREMENTS {
     out "MM,1111111111111111";
     in "MM,1111111111111111%s";
+
+    @mismatch { unset_AUTO_SEND }
 }
 
 send_OUTPUT_REQ {
