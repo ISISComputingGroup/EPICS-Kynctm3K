@@ -1,20 +1,20 @@
 file kynctm3k.template {
 
-pattern {PORT, P, CHAN}
-{"\$(PORT)", "\$(P)", "01"}
-{"\$(PORT)", "\$(P)", "02"}
-{"\$(PORT)", "\$(P)", "03"}
-{"\$(PORT)", "\$(P)", "04"}
-{"\$(PORT)", "\$(P)", "05"}
-{"\$(PORT)", "\$(P)", "06"}
-{"\$(PORT)", "\$(P)", "07"}
-{"\$(PORT)", "\$(P)", "08"}
-{"\$(PORT)", "\$(P)", "09"}
-{"\$(PORT)", "\$(P)", "10"}
-{"\$(PORT)", "\$(P)", "11"}
-{"\$(PORT)", "\$(P)", "12"}
-{"\$(PORT)", "\$(P)", "13"}
-{"\$(PORT)", "\$(P)", "14"}
-{"\$(PORT)", "\$(P)", "15"}
-{"\$(PORT)", "\$(P)", "16"}
+pattern {PORT, P, CHAN, DISCHAN, CHAN_EGU}
+{"\$(PORT)", "\$(P)", "01", "\$(DISCHAN01)", "\$(CHAN_EGU01)"}
+{"\$(PORT)", "\$(P)", "02", "\$(DISCHAN02)", "\$(CHAN_EGU02)"}
+{"\$(PORT)", "\$(P)", "03", "\$(DISCHAN03)", "\$(CHAN_EGU03)"}
+{"\$(PORT)", "\$(P)", "04", "\$(DISCHAN04)", "\$(CHAN_EGU04)"}
+{"\$(PORT)", "\$(P)", "05", "\$(DISCHAN05)", "\$(CHAN_EGU05)"}
+{"\$(PORT)", "\$(P)", "06", "\$(DISCHAN06)", "\$(CHAN_EGU06)"}
+{"\$(PORT)", "\$(P)", "07", "\$(DISCHAN07)", "\$(CHAN_EGU07)"}
+{"\$(PORT)", "\$(P)", "08", "\$(DISCHAN08)", "\$(CHAN_EGU08)"}
+{"\$(PORT)", "\$(P)", "09", "\$(DISCHAN09)", "\$(CHAN_EGU09)"}
+{"\$(PORT)", "\$(P)", "10", "\$(DISCHAN10)", "\$(CHAN_EGU10)"}
+{"\$(PORT)", "\$(P)", "11", "\$(DISCHAN11)", "\$(CHAN_EGU11)"}
+{"\$(PORT)", "\$(P)", "12", "\$(DISCHAN12)", "\$(CHAN_EGU12)"}
+{"\$(PORT)", "\$(P)", "13", "\$(DISCHAN13)", "\$(CHAN_EGU13)"}
+{"\$(PORT)", "\$(P)", "14", "\$(DISCHAN14)", "\$(CHAN_EGU14)"}
+{"\$(PORT)", "\$(P)", "15", "\$(DISCHAN15)", "\$(CHAN_EGU15)"}
+{"\$(PORT)", "\$(P)", "16", "\$(DISCHAN16)", "\$(CHAN_EGU16)"}
 }

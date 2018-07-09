@@ -29,12 +29,9 @@ std::vector<std::string> parseInput(const std::string& input)
 
     unsigned int numberOfChannels = round(input.length()/channel_string_length);
 
-    std::cout << "Number of channels: "<< input << numberOfChannels << std::endl;
-
     // This assumes that the length of the array will be exactly as long as the number of outputs we have, which is not going to be the case?
     for(unsigned int i=0;i<numberOfChannels;i++)
     {
-        std::cout << i << std::endl;
         try {
             channelwise_output.push_back (input.substr((i*channel_string_length)+1, channel_string_length-1));
         } catch (std::out_of_range) {
