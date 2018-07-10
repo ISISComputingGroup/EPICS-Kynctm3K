@@ -11,7 +11,6 @@ record(calc, "$(P)MEAS:OUT:$(CHAN)")
 
     # When a NaN value is returned the field goes into the INVALID alarm state, otherwise is unchanged.
     field(CALC, "A*1")
-	field(PREC, "3")
 	field(ASG, "READONLY")
 
     # When +/- infinity is returned, a major alarm is raised as this is out of measurement range.
