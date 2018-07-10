@@ -1,0 +1,29 @@
+##################################################
+## Output Channels DB file for Keyence TM-3001P ##
+##################################################
+
+record(calc, "$(P)MEAS:OUT:$(CHAN)")
+{
+    field(DESC, "Holds an output measurement")
+    field(SCAN, "Passive")
+    field(EGU, "$(CHAN_EGU)")
+    field(PREC, "3")
+
+    # When a NaN value is returned the field goes into the INVALID alarm state, otherwise is unchanged.
+    field(CALC, "A*1")
+	field(ASG, "READONLY")
+
+    # When +/- infinity is returned, a major alarm is raised as this is out of measurement range.
+	field(HOPR, "9999999")
+	field(HIHI, "9999999")
+	field(HHSV, "MAJOR")
+
+	field(LOLO, "-9999999")
+	field(LOPR, "-9999999")
+	field(LLSV, "MAJOR")
+
+    $(DISCHAN) info(alarm, "KYNCTM3K")
+	info(INTEREST, "HIGH")
+	info(archive, "VAL")
+}
+

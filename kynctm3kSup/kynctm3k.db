@@ -1,0 +1,117 @@
+##################################
+## DB file for Keyence TM-3001P ##
+##################################
+
+record(bo, "$(P)SIM")
+{
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+    field(VAL, "$(RECSIM=0)")
+}
+
+record(bo, "$(P)DISABLE")
+{
+    field(DESC, "Disable comms")
+    field(PINI, "YES")
+    field(ZNAM, "COMMS ENABLED")
+    field(ONAM, "COMMS DISABLED")
+    field(VAL, "$(DISABLE=0)")
+    field(OMSL, "supervisory")
+}
+
+#############################################
+## Records to parse the measurement output ##
+#############################################
+
+record(aSub, "$(P)STATUS:PARSE")
+{
+    field(DESC, "Parses the measurement values output")
+    field(PINI, "YES")
+
+    field(SNAM, "keyence_status_parse")
+
+    field(INPA, "$(P)STATUS:RAW")
+    field(FTA, "CHAR")
+    field(NOA, "512")
+
+
+    field(INPB, "$(P)STATUS:RAW.NORD")
+    field(FTB, "LONG")
+
+    field(OUTA, "$(P)MEAS:OUT:01.A PP")
+    field(FTVA, "DOUBLE")
+
+    field(OUTB, "$(P)MEAS:OUT:02.A PP")
+    field(FTVB, "DOUBLE")
+
+    field(OUTC, "$(P)MEAS:OUT:03.A PP")
+    field(FTVC, "DOUBLE")
+
+    field(OUTD, "$(P)MEAS:OUT:04.A PP")
+    field(FTVD, "DOUBLE")
+
+    field(OUTE, "$(P)MEAS:OUT:05.A PP")
+    field(FTVE, "DOUBLE")
+
+    field(OUTF, "$(P)MEAS:OUT:06.A PP")
+    field(FTVF, "DOUBLE")
+
+    field(OUTG, "$(P)MEAS:OUT:07.A PP")
+    field(FTVG, "DOUBLE")
+
+    field(OUTH, "$(P)MEAS:OUT:08.A PP")
+    field(FTVH, "DOUBLE")
+
+    field(OUTI, "$(P)MEAS:OUT:09.A PP")
+    field(FTVI, "DOUBLE")
+
+    field(OUTJ, "$(P)MEAS:OUT:10.A PP")
+    field(FTVJ, "DOUBLE")
+
+    field(OUTK, "$(P)MEAS:OUT:11.A PP")
+    field(FTVK, "DOUBLE")
+
+    field(OUTL, "$(P)MEAS:OUT:12.A PP")
+    field(FTVL, "DOUBLE")
+
+    field(OUTM, "$(P)MEAS:OUT:13.A PP")
+    field(FTVM, "DOUBLE")
+
+    field(OUTN, "$(P)MEAS:OUT:14.A PP")
+    field(FTVN, "DOUBLE")
+
+    field(OUTO, "$(P)MEAS:OUT:15.A PP")
+    field(FTVO, "DOUBLE")
+
+    field(OUTP, "$(P)MEAS:OUT:16.A PP")
+    field(FTVP, "DOUBLE")
+
+}
+
+record(waveform, "$(P)STATUS:RAW")
+{
+    field(DESC, "Reads from the device")
+    field(DTYP, "stream")
+    field(FTVL, "CHAR")
+    field(NELM, "512")
+    field(INP, "@kynctm3k.proto get_MEASUREMENTS $(PORT)")
+    field(SCAN, "1 second")
+    field(FLNK, "$(P)STATUS:PARSE")
+    field(SIML, "$(P)SIM")
+    field(SIOL, "$(P)SIM:STATUS:RAW")
+    field(SDIS, "$(P)DISABLE")
+
+    info(archive, "VAL")
+}
+
+record(ai, "$(P)SIM:STATUS:RAW")
+{
+    field(VAL, "1")
+    field(PINI, "YES")
+}
+
+record(stringin, "$(P)STATUS")
+{
+}
