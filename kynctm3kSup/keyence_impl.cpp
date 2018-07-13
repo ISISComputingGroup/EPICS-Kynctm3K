@@ -6,12 +6,12 @@
 #include <errlog.h>
 #include <epicsString.h>
 #include <epicsExport.h>
+#include <math.h>
 
 #include <string>
 #include <vector>
 #include <sstream>
 #include <iostream>
-#include <cmath>
 
 #include "keyence.h"
 
@@ -27,7 +27,7 @@ std::vector<std::string> parseInput(const std::string& input)
     const int channel_string_length = 9;
     std::vector<std::string> channelwise_output;
 
-    unsigned int numberOfChannels = round(input.length()/channel_string_length);
+    unsigned int numberOfChannels = floor(input.length()/channel_string_length);
 
     // This assumes that the length of the array will be exactly as long as the number of outputs we have, which is not going to be the case?
     for(unsigned int i=0;i<numberOfChannels;i++)
@@ -74,10 +74,10 @@ double get_channel_value(const std::string& channel_string)
  */
 
     if (std::string::npos != channel_string.find("+F")) {
-        return std::numeric_limits<double>::infinity();
+        return INFINITY;
 
     } else if (std::string::npos != channel_string.find("-F")) {
-        return -std::numeric_limits<double>::infinity();
+        return -INFINITY;
 
     } else if (std::string::npos != channel_string.find("X")){
         return NAN;
