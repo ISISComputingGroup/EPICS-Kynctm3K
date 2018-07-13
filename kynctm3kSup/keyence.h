@@ -1,9 +1,9 @@
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif /* __cplusplus */
 
 extern long keyence_status_parse_impl(aSubRecord *prec);
 
 #ifdef __cplusplus
 }
-#endif
+#endif /* __cplusplus */
