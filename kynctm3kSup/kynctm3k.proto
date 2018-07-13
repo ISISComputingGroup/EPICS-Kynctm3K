@@ -1,0 +1,447 @@
+InTerminator = CR;
+OutTerminator = CR;
+
+# /// Gets the device ID
+getIDN {
+    out "*IDN?";
+    in "%\$1[^\r\n]";
+    ExtraInput = Ignore;
+}
+
+unset_AUTO_SEND {
+    # Changes device to mode where auto send can be disabled, wait for mode to change
+    out "Q0";
+    wait 200;
+    # Turn off auto send, verify, then swap back to measurement mode
+    out "SW,EA,0";
+    in "SW,EA";
+    out "R0";
+
+}
+
+get_MEASUREMENTS {
+    out "MM,1111111111111111";
+    in "MM,1111111111111111%s";
+
+    @mismatch { unset_AUTO_SEND }
+}
+
+send_OUTPUT_REQ {
+    out "MA";
+}
+
+get_OUTPUT_DATA {
+    in "TG,\$1,%f";
+}
+
+#############################################
+#### THESE COMMANDS ARE CURRENTLY UNUSED ####
+
+# Switches between measurement screens on the device.
+set_MEAS_screen {
+    out "DC,%i";
+    in "DC";
+}
+
+# Gets all set OUT values
+get_MEAS_all {
+    out "MA";
+    in "MA,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i";
+}
+
+# Externally trigger measurement
+trigger_INPUT {
+    out "S%i";
+    in "S%i";
+}
+
+# Set auto zero for one OUT measurement
+set_AUTO_ZERO_ON {
+    out "VM,%i";
+    in "VM,%i";
+}
+
+# Set auto zero for all measured OUT measurements
+set_AUTO_ZERO_ON_ALL {
+    out "VA";
+    in "VA";
+}
+
+# Turn off auto zero for one OUT measurement
+set_AUTO_ZERO_OFF {
+    out "WM,%i";
+    in "WM,%i";
+}
+
+# Turn off auto zero for all measured OUT measurements
+set_AUTO_ZERO_OFF_ALL {
+    out "WA";
+    in "WA";
+}
+
+# Turns on timing input for specified OUT numbers (16-digit in)
+set_TIMING_INPUT {
+    out "TM,%i,%i";
+    in "TM,%i,%i";
+}
+
+# Turns on timing input OUT specified in TIMING1
+set_TIMING_1 {
+    out "T1,%i";
+    in "T1,%i";
+}
+
+
+# Resets measured value and evaluation
+RESET {
+    out "VR";
+    in "VR";
+}
+
+# Applies a keylock on the terminal to prevent accidental changes
+set_KEYLOCK {
+    out "KL,%i";
+    in "KL";
+}
+
+# Device has 16 available program slots
+get_PROGRAM_NO {
+    out "PR";
+    in "PR,%i";
+}
+
+# Choose which program to use
+set_PROGRAM_NO {
+    out "PW,%i";
+    in "PW";
+}
+
+# Switch between programs in memory and on the memory card
+set_MEMCARD_PROGRAM_NO {
+    out "PC,%i,%i";
+    in "PC";
+}
+
+# Start storage operations
+start_STORAGE {
+    out "AS";
+    in "AS";
+}
+
+# Stop storage operations
+stop_STORAGE {
+    out "AP";
+    in "AP";
+}
+
+# Clears stored data
+init_STORAGE {
+    out "AQ";
+    in "AQ";
+}
+
+# Confirms state of storage (running/stopped)
+get_STORAGE_STATE {
+    out "AN";
+    in "AN,%i,%i";
+}
+
+# Acquire the currently stored data
+get_STORAGE_DATA {
+    out "AD,%i";
+    in "AD,%i";
+}
+
+# Copies stored data from memory to memory card
+save_STORAGE_DATA {
+    out "SS";
+    in "SS";
+}
+
+###################
+## HEAD SETTINGS ##
+###################
+
+# 0:continuous; 1:external
+set_TRIGGER_MODE {
+    out "SW,HA,%i";
+    in "SW,HA";
+}
+
+# 0:continuous; 1:external
+get_TRIGGER_MODE {
+    out "SR,HA";
+    in "SR,HA,%i";
+}
+
+# 0:Interference prevention off; 1:Interference prevention on
+set_INTERFERENCE_PREVENTION {
+    out "SW,HB,%i";
+    in "SW,HB";
+}
+
+# 0:Unset; 1:Set
+get_INTERFERENCE_PREVENTION {
+    out "SR,HB";
+    in "SR,HB,%i";
+}
+
+# 0:Unset; 1:Set
+set_TRIGGER_RATE {
+    out "SW,HC,%i";
+    in "SW,HC";
+}
+
+# 0:Unset; 1:Set
+get_TRIGGER_RATE {
+    out "SR,HC";
+    in "SR,HC";
+}
+
+# (0|1|2):(Both heads|only Head A|only Head B), (range head A), (range head B)
+set_MEAS_RANGE {
+    out "SW,HD,%i,%i,%i";
+    in "SW,HD";
+}
+
+get_MEAS_RANGE {
+    out "SR,HD,%i";
+    in "SR,HD,%i,%i,%i";
+}
+
+# (0|1|2):(Both heads|only Head A|only Head B), Threshold 10-99
+set_THRESHOLD_VALUE {
+    out "SW,HE,%i,%i";
+    in "SW,HE";
+}
+
+get_THRESHOLD_VALUE {
+    out "SR,HE,%i";
+    in "SR,HE,%i,%i";
+}
+
+###############################################
+################ OUT Settings #################
+## Applied piecewise to a single OUT channel ##
+###############################################
+
+# Sets a moving average for each OUT channel
+set_OUT_AVERAGE {
+    out "SW,OA,%i,%i";
+    in "SW,OA";
+}
+
+get_OUT_AVERAGE {
+    out "SR,OA,%i";
+    in "SR,OA,%i,%i";
+}
+
+# Sets the ALARM specification for an OUT channel
+set_OUT_ALARM {
+    out "SW,OB,%i,%i";
+    in "SW,OB";
+}
+
+get_OUT_ALARM {
+    out "SR,OB,%i";
+    in "SR,OB,%i,%i";
+}
+
+set_OUT_MEAS_MODE {
+    out "SW,OC,%i,%i";
+    in "SW,OC";
+}
+
+get_OUT_MEAS_MODE {
+    out "SR,OC,%i";
+    in "SR,OC,%i,%i";
+}
+
+set_OUT_OFFSET {
+    out "SW,OD,%i,%i";
+    in "SW,OD";
+}
+
+get_OUT_OFFSET {
+    out "SR,OD,%i";
+    in "SR,OD,%i,%i";
+}
+
+set_OUT_MIN_DISPLAY_UNIT {
+    out "SW,OE,%i,%i";
+    in "SW,OE";
+}
+
+get_OUT_MIN_DISPLAY_UNIT {
+    out "SR,OE,%i";
+    in "SR,OE,%i,%i";
+}
+
+set_OUT_SCALING {
+    out "SW,OF,%i,%i,%i,%i";
+    in "SW,OF";
+}
+
+get_OUT_SCALING {
+    out "SR,OF,%i";
+    in "SR,OF,%i,%i,%i,%i,%i";
+}
+
+set_OUT_TOLERANCE {
+    out "SW,LM,%i,%i,%i";
+    in "SW,LM";
+}
+
+get_OUT_TOLERANCE {
+    out "SR,LM,%i";
+    in "SR,LM,%i,%i,%i";
+}
+
+#########################################
+############ Common settings ############
+## Usually applied to all OUT channels ##
+#########################################
+
+# 1:TIMING1 used; 2:TIMING2 used
+set_COMMON_TIMING {
+    out "SW,CA,%i";
+    in "SW,CA";
+}
+
+get_COMMON_TIMING {
+    out "SR,CA";
+    in "SR,CA,%i";
+}
+
+# 1:ZERO1 used; 2:ZERO2 used
+set_COMMON_ZERO {
+    out "SW,CB,%i";
+    in "SW,CB";
+}
+
+get_COMMON_ZERO {
+    out "SR,CB";
+    in "SR,CB,%i";
+}
+
+# (0|1):Unset/set Evaluation output, 16 digits sets/unsets binary output for each OUT channel
+set_COMMON_OUTPUTS {
+    out "SW,CC,%i,%i";
+    in "SW,CC";
+}
+
+get_COMMON_OUTPUTS {
+    out "SR,CC";
+    in "SR,CC,%i,%i";
+}
+
+# 0:CH1 used; 1:CH2 used, OUT number (1-16)
+set_COMMON_ANALOG_OUT {
+    out "SW,CD,%i,%i";
+    in "SW,CD,%i";
+}
+
+get_COMMON_ANALOG_OUT {
+    out "SR,CD,%i";
+    in "SR,CD,%i,%i";
+}
+
+set_COMMON_ANALOG_SCALE {
+    out "SW,CE,%i,%i,%i,%i,%i";
+    in "SW,CE";
+}
+
+get_COMMON_ANALOG_SCALE {
+    out "SR,CE,%i";
+#    in "SR,CE,%i,%i,%i,%i,%i";
+}
+
+# 0:store nothing; 1:store data; 2:store images
+set_COMMON_STORAGE_TYPE {
+    out "SW,CF,%i";
+    in "SW,CF";
+}
+
+get_COMMON_STORAGE_TYPE {
+    out "SR,CF";
+    in "SR,CF,%i";
+}
+
+set_COMMON_DATA_STORAGE {
+    out "SW,CG,%i,%i";
+    in "SW,CG";
+}
+
+get_COMMON_DATA_STORAGE {
+    out "SR,CG";
+    in "SR,CG,%i,%i";
+}
+
+set_COMMON_IMAGE_STORAGE {
+    out "SW,CH,%i,%i";
+    in "SW,CH";
+}
+
+get_COMMON_IMAGE_STORAGE {
+    out "SR,CH";
+    in "SR,CH,%i,%i";
+}
+
+set_COMMON_DATA_OUT_TIMING {
+    out "SW,CJ,%i";
+    in "SW,CJ";
+}
+
+get_COMMON_DATA_OUT_TIMING {
+    out "SR,CJ";
+    in "SR,CJ,%i";
+}
+
+###########################
+## Environment settings ###
+## Mostly comms settings ##
+###########################
+
+set_ENVIR_STROBE_TIME {
+    out "SW,EB,%i";
+    in "SW,EB";
+}
+
+get_ENVIR_STROBE_TIME {
+    out "SR,EB";
+    in "SR,EB,%i";
+}
+
+# 1 only if used with CB-A30
+set_ENVIR_CABLE_EXPANSION {
+    out "SW,EC,%i";
+    in "SW,EC";
+}
+
+get_ENVIR_CABLE_EXPANSION {
+    out "SR,EC";
+    in "SR,EC,%i";
+}
+
+# 0:Console switching, 1:Terminal switching
+set_ENVIR_PROG_SWITCH {
+    out "SW,EF,%i";
+    in "SW,EF"
+}
+
+get_ENVIR_PROG_SWITCH {
+    out "SR,EF";
+    in "SR,EF,%i"
+}
+
+# 0 to not save operations to flash (to preserve lifetime), 1 to save
+set_ENVIR_SAVE {
+    out "SW,EG,%i";
+    in "SW,EG";
+}
+
+get_ENVIR_SAVE {
+    out "SW,EG";
+    in "SW,EG,%i";
+}
+
