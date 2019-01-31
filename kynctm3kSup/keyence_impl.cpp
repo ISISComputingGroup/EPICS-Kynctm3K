@@ -5,6 +5,7 @@
 #include <vector>
 #include <sstream>
 #include <iostream>
+#include <stdexcept>
 
 #include <registryFunction.h>
 #include <aSubRecord.h>
