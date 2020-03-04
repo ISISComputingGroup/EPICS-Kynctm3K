@@ -94,13 +94,16 @@ long keyence_status_parse_impl(aSubRecord* prec)
     try {
     std::vector<std::string> split_strings;
 
-    long inputLength = *(long*)prec->b;
+    const char* input = (const char*) prec->a;
+    
+    // We can't just use NORD as it might or might not include a NULL terminator
+    long inputLength = strnlen(input, *(long*)prec->b);
 
 
-    // This length comes from 16 channels, 9 characters per channel, +1 for null terminator (the NULL is included in NORD)
-    if (inputLength == 16*9 + 1) {
+    // This length comes from 16 channels, 9 characters per channel
+    if (inputLength == 16*9) {
 
-        parseInput(std::string((const char*)prec->a, inputLength), split_strings);
+        parseInput(std::string(input, inputLength), split_strings);
 
         *(double*)prec->vala = get_channel_value(split_strings[0]);
         *(double*)prec->valb = get_channel_value(split_strings[1]);
@@ -121,6 +124,7 @@ long keyence_status_parse_impl(aSubRecord* prec)
 
     } else {
         // String is of incorrect length
+        errlogSevPrintf(errlogMajor, "%s string has incorrect length - cannot process", prec->name);
         return 1;
     }
 
