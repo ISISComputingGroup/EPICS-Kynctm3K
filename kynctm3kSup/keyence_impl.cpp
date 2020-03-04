@@ -97,8 +97,8 @@ long keyence_status_parse_impl(aSubRecord* prec)
     long inputLength = *(long*)prec->b;
 
 
-    // This length comes from 16 channels, 9 characters per channel
-    if (inputLength == 16*9) {
+    // This length comes from 16 channels, 9 characters per channel, +1 for null terminator (the NULL is included in NORD)
+    if (inputLength == 16*9 + 1) {
 
         parseInput(std::string((const char*)prec->a, inputLength), split_strings);
 
